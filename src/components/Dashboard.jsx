@@ -6,10 +6,54 @@ import { useAuth } from '../context/AuthContext';
 import NewTaskModal from './NewTaskModal';
 import TaskDetailModal from './TaskDetailModal';
 import CalendarView from './CalendarView';
-import { DndContext, closestCorners, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, closestCorners, DragOverlay, PointerSensor, useSensor, useSensors, useDroppable, KeyboardSensor } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import TaskCard from './TaskCard';
 import { useActivity } from '../context/ActivityContext';
+
+const DroppableColumn = ({ cat, categoryTasks, tasks, setIsModalOpen, activeMenu, setActiveMenu, menuRef, clearTasksByStatus, setSelectedTask }) => {
+    const { setNodeRef } = useDroppable({
+        id: cat,
+    });
+
+    return (
+        <div ref={setNodeRef} className="flex flex-col h-full min-w-[300px] flex-1">
+            {/* Column Header */}
+            <div className="flex justify-between items-center mb-4 px-2">
+                <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${cat === 'To Do' ? 'bg-slate-500' : cat === 'In Progress' ? 'bg-hustle-purple' : 'bg-hustle-accent'}`}></div>
+                    <h3 className="font-bold text-slate-200 tracking-tight">{cat}</h3>
+                    <span className="bg-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full text-slate-500 border border-slate-700/50">{categoryTasks.length}</span>
+                </div>
+                <div className="flex space-x-1 relative">
+                    <button onClick={() => setIsModalOpen(true)} className="p-1 hover:bg-slate-800 rounded text-slate-400 group"><Plus size={16} className="group-hover:text-white transition-colors" /></button>
+                    <button onClick={() => setActiveMenu(activeMenu === cat ? null : cat)} className={`p-1 hover:bg-slate-800 rounded transition-colors ${activeMenu === cat ? 'text-white' : 'text-slate-400'}`}><MoreHorizontal size={16} /></button>
+                    {activeMenu === cat && (
+                        <div ref={menuRef} className="absolute right-0 top-8 w-40 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
+                            <button onClick={() => { clearTasksByStatus(cat); setActiveMenu(null); }} className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-slate-700/50 flex items-center space-x-2 transition-colors">
+                                <Trash2 size={14} /> <span>Clear All</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Droppable Area */}
+            <SortableContext id={cat} items={categoryTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
+                <div className="space-y-4 min-h-[500px]">
+                    {categoryTasks.map(task => (
+                        <SortableTaskCard key={task.id} id={task.id} {...task} onClick={() => setSelectedTask(task)} />
+                    ))}
+                    {categoryTasks.length === 0 && (
+                        <div className="border-2 border-dashed border-slate-800 rounded-2xl p-8 text-center bg-slate-800/20 group hover:border-slate-700 transition-colors">
+                            <p className="text-slate-500 text-sm font-medium">Drop tasks here</p>
+                        </div>
+                    )}
+                </div>
+            </SortableContext>
+        </div>
+    );
+};
 
 const Dashboard = () => {
     const { tasks, getStats, addTask, updateTaskStatus, updateTask, deleteTask, setSearchQuery, clearTasksByStatus } = useTasks();
@@ -25,15 +69,14 @@ const Dashboard = () => {
     const stats = getStats();
     const categories = ['To Do', 'In Progress', 'Done'];
 
-    // Update searchQuery in context, but using a local tasks filter for the board for drag/drop visual stability 
-    // (Filter logic is handled by Context usually, but for DnD we need full list to move items)
-    // For simplicity, we just use 'tasks' from context directly here and filter in render for columns.
-
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 8, // Require 8px movement before drag starts (prevents accidental drag on click)
+                distance: 5,
             },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
         })
     );
 
@@ -60,22 +103,25 @@ const Dashboard = () => {
         }
 
         const activeTask = tasks.find(t => t.id === active.id);
-        const overContainer = over.data.current?.sortable?.containerId || over.id; // 'To Do', etc.
+        if (!activeTask) {
+            setActiveId(null);
+            return;
+        }
 
-        // If dropped over a column directly (the container)
-        if (categories.includes(overContainer)) {
-            if (activeTask.status !== overContainer) {
-                updateTaskStatus(activeTask.id, overContainer);
-                logActivity('TASK_MOVED', activeTask.id, activeTask.title, { from: activeTask.status, to: overContainer });
+        // Determine destination status
+        let newStatus = null;
+        if (categories.includes(over.id)) {
+            newStatus = over.id;
+        } else {
+            const overTask = tasks.find(t => t.id === over.id);
+            if (overTask) {
+                newStatus = overTask.status;
             }
         }
-        // If dropped over another item
-        else {
-            const overTask = tasks.find(t => t.id === over.id);
-            if (overTask && activeTask.status !== overTask.status) {
-                updateTaskStatus(activeTask.id, overTask.status);
-                logActivity('TASK_MOVED', activeTask.id, activeTask.title, { from: activeTask.status, to: overTask.status });
-            }
+
+        if (newStatus && activeTask.status !== newStatus) {
+            updateTaskStatus(activeTask.id, newStatus);
+            logActivity('TASK_MOVED', activeTask.id, activeTask.title, { from: activeTask.status, to: newStatus });
         }
 
         setActiveId(null);
@@ -151,51 +197,32 @@ const Dashboard = () => {
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                 >
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-10 animate-fade-in">
+                    <div className="flex flex-col lg:flex-row gap-8 pb-10 overflow-x-auto custom-scrollbar animate-fade-in">
                         {categories.map((cat) => {
                             const categoryTasks = tasks.filter(t => t.status === cat);
                             return (
-                                <div key={cat} className="flex flex-col h-full">
-                                    {/* Column Header */}
-                                    <div className="flex justify-between items-center mb-4 px-2">
-                                        <div className="flex items-center space-x-2">
-                                            <div className={`w-2 h-2 rounded-full ${cat === 'To Do' ? 'bg-slate-500' : cat === 'In Progress' ? 'bg-hustle-purple' : 'bg-hustle-accent'}`}></div>
-                                            <h3 className="font-bold text-slate-200 tracking-tight">{cat}</h3>
-                                            <span className="bg-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full text-slate-500 border border-slate-700/50">{categoryTasks.length}</span>
-                                        </div>
-                                        <div className="flex space-x-1 relative">
-                                            <button onClick={() => setIsModalOpen(true)} className="p-1 hover:bg-slate-800 rounded text-slate-400"><Plus size={16} /></button>
-                                            <button onClick={() => setActiveMenu(activeMenu === cat ? null : cat)} className={`p-1 hover:bg-slate-800 rounded transition-colors ${activeMenu === cat ? 'text-white' : 'text-slate-400'}`}><MoreHorizontal size={16} /></button>
-                                            {activeMenu === cat && (
-                                                <div ref={menuRef} className="absolute right-0 top-8 w-40 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10 overflow-hidden">
-                                                    <button onClick={() => { clearTasksByStatus(cat); setActiveMenu(null); }} className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-slate-700/50 flex items-center space-x-2">
-                                                        <Trash2 size={14} /> <span>Clear All</span>
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Droppable Column */}
-                                    <SortableContext id={cat} items={categoryTasks} strategy={verticalListSortingStrategy}>
-                                        <div className="space-y-4 min-h-[500px]" >
-                                            {categoryTasks.map(task => (
-                                                <SortableTaskCard key={task.id} id={task.id} {...task} onClick={() => setSelectedTask(task)} />
-                                            ))}
-                                            {categoryTasks.length === 0 && (
-                                                <div className="border-2 border-dashed border-slate-800 rounded-xl p-8 text-center bg-slate-800/20">
-                                                    <p className="text-slate-500 text-sm">No tasks here</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </SortableContext>
-                                </div>
+                                <DroppableColumn
+                                    key={cat}
+                                    cat={cat}
+                                    categoryTasks={categoryTasks}
+                                    tasks={tasks}
+                                    setIsModalOpen={setIsModalOpen}
+                                    activeMenu={activeMenu}
+                                    setActiveMenu={setActiveMenu}
+                                    menuRef={menuRef}
+                                    clearTasksByStatus={clearTasksByStatus}
+                                    setSelectedTask={setSelectedTask}
+                                />
                             );
                         })}
                     </div>
 
-                    <DragOverlay>
-                        {activeId ? <TaskCard {...tasks.find(t => t.id === activeId)} /> : null}
+                    <DragOverlay dropAnimation={null}>
+                        {activeId ? (
+                            <div className="rotate-3 scale-105 shadow-2xl opacity-90 transition-transform duration-200">
+                                <TaskCard {...tasks.find(t => t.id === activeId)} />
+                            </div>
+                        ) : null}
                     </DragOverlay>
                 </DndContext>
             )}

@@ -110,72 +110,77 @@ const Sidebar = () => {
                     )}
                 </div>
 
-                <nav className="flex-1 px-4 space-y-2">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive(item.path)
-                                ? 'bg-gradient-to-r from-hustle-accent/20 to-hustle-purple/20 text-hustle-accent shadow-lg shadow-hustle-accent/10 border border-hustle-accent/20'
-                                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                                }`}
-                        >
-                            <item.icon size={20} className={isActive(item.path) ? 'text-hustle-accent' : 'group-hover:scale-110 transition-transform'} />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    ))}
-                </nav>
-
-                {/* Focus Mode Timer */}
-                <div className="mx-4 mb-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700/30">
-                    <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
-                            <Timer size={14} className={isTimerActive ? 'text-hustle-accent animate-pulse' : 'text-slate-600'} />
-                            {mode === 'focus' ? 'Deep Work' : 'Break'}
-                        </div>
-                        <button onClick={resetTimer} className="text-slate-600 hover:text-slate-300 transition-colors">
-                            <RotateCcw size={14} />
-                        </button>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <span className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                            {formatTime(timeLeft)}
-                        </span>
-                        <button
-                            onClick={toggleTimer}
-                            className={`p-2 rounded-full transition-all shadow-lg ${isTimerActive
-                                ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 shadow-orange-500/10'
-                                : 'bg-hustle-accent text-slate-900 hover:bg-sky-400 shadow-sky-500/20'
-                                }`}
-                        >
-                            {isTimerActive ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Team Presence */}
-                <div className="px-4 py-4 border-t border-slate-700">
-                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-2">Team Presence</h3>
-                    <div className="space-y-2">
-                        {onlineUsers.map(u => (
-                            <div key={u.id} className="flex items-center justify-between group cursor-pointer hover:bg-slate-800 p-2 rounded-lg transition-colors">
-                                <div className="flex items-center space-x-3">
-                                    <div className="relative">
-                                        <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full border border-slate-700" />
-                                        <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-hustle-secondary ${u.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'
-                                            }`}></div>
-                                    </div>
-                                    <div className="overflow-hidden">
-                                        <p className="text-sm font-medium text-slate-300 truncate group-hover:text-white transition-colors">{u.name}</p>
-                                        <p className="text-[10px] text-slate-500 truncate">{u.role}</p>
-                                    </div>
-                                </div>
-                            </div>
+                {/* Sidebar Content - Scrollable area */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+                    <nav className="px-4 py-4 space-y-1">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all duration-200 group ${isActive(item.path)
+                                    ? 'bg-gradient-to-r from-hustle-accent/20 to-hustle-purple/20 text-hustle-accent shadow-lg shadow-hustle-accent/10 border border-hustle-accent/20'
+                                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                                    }`}
+                            >
+                                <item.icon size={18} className={isActive(item.path) ? 'text-hustle-accent' : 'group-hover:scale-110 transition-transform'} />
+                                <span className="font-medium text-sm">{item.label}</span>
+                            </Link>
                         ))}
+                    </nav>
+
+                    <div className="mt-auto">
+                        {/* Focus Mode Timer */}
+                        <div className="mx-4 mb-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700/30">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                                    <Timer size={14} className={isTimerActive ? 'text-hustle-accent animate-pulse' : 'text-slate-600'} />
+                                    {mode === 'focus' ? 'Deep Work' : 'Break'}
+                                </div>
+                                <button onClick={resetTimer} className="text-slate-600 hover:text-slate-300 transition-colors">
+                                    <RotateCcw size={14} />
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-2xl font-black text-white tabular-nums tracking-tighter">
+                                    {formatTime(timeLeft)}
+                                </span>
+                                <button
+                                    onClick={toggleTimer}
+                                    className={`p-2 rounded-full transition-all shadow-lg ${isTimerActive
+                                        ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 shadow-orange-500/10'
+                                        : 'bg-hustle-accent text-slate-900 hover:bg-sky-400 shadow-sky-500/20'
+                                        }`}
+                                >
+                                    {isTimerActive ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Team Presence */}
+                        <div className="px-4 py-4 border-t border-slate-700">
+                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-2">Team Presence</h3>
+                            <div className="space-y-1">
+                                {onlineUsers.map(u => (
+                                    <div key={u.id} className="flex items-center justify-between group cursor-pointer hover:bg-slate-800 p-2 rounded-lg transition-colors">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="relative">
+                                                <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full border border-slate-700" />
+                                                <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-hustle-secondary ${u.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'
+                                                    }`}></div>
+                                            </div>
+                                            <div className="overflow-hidden">
+                                                <p className="text-sm font-medium text-slate-300 truncate group-hover:text-white transition-colors">{u.name}</p>
+                                                <p className="text-[10px] text-slate-500 truncate">{u.role}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="p-4 border-t border-slate-700">
+                <div className="p-4 border-t border-slate-700 mt-auto bg-hustle-secondary">
                     <button
                         onClick={logout}
                         className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"

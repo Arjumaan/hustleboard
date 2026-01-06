@@ -16,12 +16,40 @@ export const WikiProvider = ({ children }) => {
         const saved = localStorage.getItem('hustleboard_wiki');
         return saved ? JSON.parse(saved) : [
             {
+                id: 'wiki_notion',
+                workspaceId: 'ws_personal',
+                title: 'Notion Architecture Breakdown',
+                content: '# Notion — Deep Breakdown\n\n## 1.1 What Notion fundamentally is\nNotion is not a notes app or a task app. It is a block-based content engine with a relational database layer on top.\n\n## 1.2 How Notion Works (Core Architecture Concept)\n### A. Block-Based System (The Foundation)\nEvery unit of content is a block: Paragraph, Heading, Image, Toggle, Table row, Task. Blocks can exist independently, be nested, and be rearranged freely.\n\n### B. Pages Are Containers\nA page is simply a block that can contain other blocks. This creates wiki-style navigation with no rigid folder hierarchy.\n\n### C. Databases (Not Spreadsheets)\nNotion databases are typed collections of blocks. Each database is a table where each row is a page with its own properties and content area.\n\n## 1.3 How Notion Stores Data\nAt a conceptual level, blocks have unique IDs, types, content, and parent references. Data exists once; views (Table, Board, Calendar) are projections.\n\n## 1.4 How the Notion UI Works\n- **Cursor-first design**: / command for everything.\n- **Keyboard-driven**: Minimal toolbars, reduces cognitive load.\n- **Visual Calm**: Neutral colors and progressive disclosure.',
+                tags: ['research', 'notion', 'architecture'],
+                linkedPages: [],
+                backlinks: [],
+                template: false,
+                isPublished: true,
+                publicId: 'notion_breakdown',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
+                id: 'wiki_trello',
+                workspaceId: 'ws_personal',
+                title: 'Trello Flow Breakdown',
+                content: '# Trello — Deep Breakdown\n\n## 2.1 What Trello fundamentally is\nTrello is a visual state-management system based on Kanban principles. It focuses on flow, not structure.\n\n## 2.2 How Trello Works\n### A. Board → List → Card Model\nBoard = Project, List = State (To Do, Doing, Done), Card = Work item. This is a finite-state workflow.\n\n### B. Cards Are Lightweight\nEach card contains title, description, checklists, and labels. There is no deep hierarchy, giving Trello speed and predictability.\n\n## 2.3 How Trello Stores Data\nCard metadata is stored flat. Movement = updating list ID + order index. No relational databases or nested pages.\n\n## 2.4 How the Trello UI Works\n- **Visual-First**: Columns represent status, cards represent tasks.\n- **Immediate Feedback**: Move a card -> instant visual progress.\n- **Low Cognitive Load**: No complex menus or nested navigation.',
+                tags: ['research', 'trello', 'kanban'],
+                linkedPages: [],
+                backlinks: [],
+                template: false,
+                isPublished: true,
+                publicId: 'trello_breakdown',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            {
                 id: 'wiki_1',
                 workspaceId: 'ws_personal',
                 title: 'Getting Started Guide',
-                content: '# Getting Started\n\nWelcome to your workspace!\n\n## Quick Links\n- [[Product Roadmap]]\n- [[Team Handbook]]',
+                content: '# Getting Started\n\nWelcome to your workspace!\n\n## Insights\n- [[Notion Architecture Breakdown]]\n- [[Trello Flow Breakdown]]\n\n## Internal Docs\n- [[Product Roadmap]]',
                 tags: ['guide', 'onboarding'],
-                linkedPages: ['wiki_2'],
+                linkedPages: ['wiki_notion', 'wiki_trello', 'wiki_2'],
                 backlinks: [],
                 template: false,
                 isPublished: true,

@@ -19,6 +19,22 @@ export const TaskProvider = ({ children }) => {
         const saved = localStorage.getItem('hustleboard_tasks');
         return saved ? JSON.parse(saved) : [
             {
+                id: 4,
+                workspaceId: 'ws_personal',
+                title: 'Review Notion & Trello Architectures',
+                category: 'Research',
+                status: 'To Do',
+                priority: 'Medium',
+                dueDate: 'Oct 30',
+                assignees: [],
+                description: 'Deep dive into the block-based model of Notion and the state-management flow of Trello to refine HustleBoard core mechanics.',
+                subtasks: [
+                    { id: 1, text: 'Analyze [[Notion Architecture Breakdown]]', completed: false },
+                    { id: 2, text: 'Analyze [[Trello Flow Breakdown]]', completed: false }
+                ],
+                comments: []
+            },
+            {
                 id: 1,
                 title: 'Redesign Homepage',
                 category: 'Design',

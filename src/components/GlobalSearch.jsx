@@ -73,7 +73,7 @@ const GlobalSearch = () => {
     if (!isOpen) return (
         <button
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-8 left-8 bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-full flex items-center gap-3 text-slate-400 hover:text-white hover:border-hustle-accent transition-all shadow-2xl z-40 group"
+            className="fixed bottom-8 left-6 lg:left-72 bg-slate-800/80 backdrop-blur-md border border-slate-700/50 px-4 py-2.5 rounded-full flex items-center gap-3 text-slate-400 hover:text-white hover:border-hustle-accent transition-all shadow-2xl z-40 group"
         >
             <Search size={18} className="group-hover:text-hustle-accent transition-colors" />
             <span className="text-sm font-medium pr-2">Search everywhere</span>
