@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useWiki } from '../context/WikiContext';
-import { FileText, Plus, Search, Tag, Link2, ArrowLeft, Trash2, MoreVertical, FileCheck, Share2, Globe, Eye } from 'lucide-react';
+import { FileText, Plus, Search, Tag, Link2, ArrowLeft, Trash2, FileCheck, Share2, Globe, Eye } from 'lucide-react';
 import { MarkdownRenderer } from '../components/BlockBasedEditor';
 import { useActivity } from '../context/ActivityContext';
 

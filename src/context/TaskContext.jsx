@@ -21,16 +21,16 @@ export const TaskProvider = ({ children }) => {
             {
                 id: 4,
                 workspaceId: 'ws_personal',
-                title: 'Review Notion & Trello Architectures',
+                title: 'Analyze Knowledge & Workflow Systems',
                 category: 'Research',
                 status: 'To Do',
                 priority: 'Medium',
                 dueDate: 'Oct 30',
                 assignees: [],
-                description: 'Deep dive into the block-based model of Notion and the state-management flow of Trello to refine HustleBoard core mechanics.',
+                description: 'Deep dive into block-based models and state-management flows to refine HustleBoard core mechanics.',
                 subtasks: [
-                    { id: 1, text: 'Analyze [[Notion Architecture Breakdown]]', completed: false },
-                    { id: 2, text: 'Analyze [[Trello Flow Breakdown]]', completed: false }
+                    { id: 1, text: 'Analyze [[Block-Based Knowledge Systems]]', completed: false },
+                    { id: 2, text: 'Analyze [[State-Management Workflows]]', completed: false }
                 ],
                 comments: []
             },

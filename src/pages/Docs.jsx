@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDocs } from '../context/DocsContext';
-import { FileText, Plus, Trash2, Search, Clock, Edit3, Eye, Save, Code } from 'lucide-react';
+import { FileText, Plus, Trash2, Search, Clock, Edit3, Eye, Code } from 'lucide-react';
 import { BlockBasedEditor, MarkdownRenderer } from '../components/BlockBasedEditor';
 import { useActivity } from '../context/ActivityContext';
 

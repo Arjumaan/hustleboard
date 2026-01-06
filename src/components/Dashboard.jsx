@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Plus, MoreHorizontal, Trash2, Layout, Calendar } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, Trash2, Layout, Calendar } from 'lucide-react';
 import SortableTaskCard from './SortableTaskCard';
 import { useTasks } from '../context/TaskContext';
 import { useAuth } from '../context/AuthContext';
@@ -7,7 +7,7 @@ import NewTaskModal from './NewTaskModal';
 import TaskDetailModal from './TaskDetailModal';
 import CalendarView from './CalendarView';
 import { DndContext, closestCorners, DragOverlay, PointerSensor, useSensor, useSensors, useDroppable, KeyboardSensor } from '@dnd-kit/core';
-import { arrayMove, SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import TaskCard from './TaskCard';
 import { useActivity } from '../context/ActivityContext';
 

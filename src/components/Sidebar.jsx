@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, CheckSquare, BarChart2, Settings, LogOut, Briefcase, FileText, Users, ChevronDown, PlusCircle, BookOpen, GanttChart, Bell, Zap, ClipboardList, Timer, Play, Pause, RotateCcw, Menu, X as CloseIcon } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, BarChart2, Settings, LogOut, Briefcase, FileText, Users, ChevronDown, PlusCircle, BookOpen, GanttChart, Bell, Zap, ClipboardList, Timer, Play, Pause, RotateCcw, Menu, Share2, X as CloseIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -27,6 +27,7 @@ const Sidebar = () => {
         { path: '/automation', icon: Zap, label: 'Automation' },
         { path: '/forms', icon: ClipboardList, label: 'Forms' },
         { path: '/timeline', icon: GanttChart, label: 'Timeline' },
+        { path: '/connectors', icon: Share2, label: 'Connectors' },
         { path: '/settings', icon: Settings, label: 'Settings' },
     ];
 

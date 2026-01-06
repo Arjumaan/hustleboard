@@ -19,6 +19,7 @@ import { AutomationProvider } from './context/AutomationContext';
 import { FormProvider } from './context/FormContext';
 import { TeamProvider } from './context/TeamContext';
 import { FocusProvider } from './context/FocusContext';
+import { ConnectorProvider } from './context/ConnectorContext';
 import Wiki from './pages/Wiki';
 import SignupPage from './pages/SignupPage';
 import TimelineView from './pages/TimelineView';
@@ -27,6 +28,7 @@ import Automation from './pages/Automation';
 import Forms from './pages/Forms';
 import PublicForm from './pages/PublicForm';
 import PublicWiki from './pages/PublicWiki';
+import Connectors from './pages/Connectors';
 
 const ProtectedLayout = ({ children }) => {
   const { user } = useAuth();
@@ -45,43 +47,46 @@ function App() {
   return (
     <AuthProvider>
       <WorkspaceProvider>
-        <ActivityProvider>
-          <AutomationProvider>
-            <FormProvider>
-              <TeamProvider>
-                <FocusProvider>
-                  <TaskProvider>
-                    <DocsProvider>
-                      <WikiProvider>
-                        <Router>
-                          <Routes>
-                            <Route path="/f/:publicId" element={<PublicForm />} />
-                            <Route path="/kb/:publicId" element={<PublicWiki />} />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/signup" element={<SignupPage />} />
+        <ConnectorProvider>
+          <ActivityProvider>
+            <AutomationProvider>
+              <FormProvider>
+                <TeamProvider>
+                  <FocusProvider>
+                    <TaskProvider>
+                      <DocsProvider>
+                        <WikiProvider>
+                          <Router>
+                            <Routes>
+                              <Route path="/f/:publicId" element={<PublicForm />} />
+                              <Route path="/kb/:publicId" element={<PublicWiki />} />
+                              <Route path="/login" element={<LoginPage />} />
+                              <Route path="/signup" element={<SignupPage />} />
 
-                            <Route path="/" element={<ProtectedLayout><Dashboard /></ProtectedLayout>} />
-                            <Route path="/projects" element={<ProtectedLayout><Projects /></ProtectedLayout>} />
-                            <Route path="/my-tasks" element={<ProtectedLayout><MyTasks /></ProtectedLayout>} />
-                            <Route path="/docs" element={<ProtectedLayout><Docs /></ProtectedLayout>} />
-                            <Route path="/wiki" element={<ProtectedLayout><Wiki /></ProtectedLayout>} />
-                            <Route path="/team" element={<ProtectedLayout><Team /></ProtectedLayout>} />
-                            <Route path="/analytics" element={<ProtectedLayout><Analytics /></ProtectedLayout>} />
-                            <Route path="/activity" element={<ProtectedLayout><Activity /></ProtectedLayout>} />
-                            <Route path="/automation" element={<ProtectedLayout><Automation /></ProtectedLayout>} />
-                            <Route path="/forms" element={<ProtectedLayout><Forms /></ProtectedLayout>} />
-                            <Route path="/timeline" element={<ProtectedLayout><TimelineView /></ProtectedLayout>} />
-                            <Route path="/settings" element={<ProtectedLayout><Settings /></ProtectedLayout>} />
-                          </Routes>
-                        </Router>
-                      </WikiProvider>
-                    </DocsProvider>
-                  </TaskProvider>
-                </FocusProvider>
-              </TeamProvider>
-            </FormProvider>
-          </AutomationProvider>
-        </ActivityProvider>
+                              <Route path="/" element={<ProtectedLayout><Dashboard /></ProtectedLayout>} />
+                              <Route path="/projects" element={<ProtectedLayout><Projects /></ProtectedLayout>} />
+                              <Route path="/my-tasks" element={<ProtectedLayout><MyTasks /></ProtectedLayout>} />
+                              <Route path="/docs" element={<ProtectedLayout><Docs /></ProtectedLayout>} />
+                              <Route path="/wiki" element={<ProtectedLayout><Wiki /></ProtectedLayout>} />
+                              <Route path="/team" element={<ProtectedLayout><Team /></ProtectedLayout>} />
+                              <Route path="/analytics" element={<ProtectedLayout><Analytics /></ProtectedLayout>} />
+                              <Route path="/activity" element={<ProtectedLayout><Activity /></ProtectedLayout>} />
+                              <Route path="/automation" element={<ProtectedLayout><Automation /></ProtectedLayout>} />
+                              <Route path="/forms" element={<ProtectedLayout><Forms /></ProtectedLayout>} />
+                              <Route path="/timeline" element={<ProtectedLayout><TimelineView /></ProtectedLayout>} />
+                              <Route path="/settings" element={<ProtectedLayout><Settings /></ProtectedLayout>} />
+                              <Route path="/connectors" element={<ProtectedLayout><Connectors /></ProtectedLayout>} />
+                            </Routes>
+                          </Router>
+                        </WikiProvider>
+                      </DocsProvider>
+                    </TaskProvider>
+                  </FocusProvider>
+                </TeamProvider>
+              </FormProvider>
+            </AutomationProvider>
+          </ActivityProvider>
+        </ConnectorProvider>
       </WorkspaceProvider>
     </AuthProvider>
   );

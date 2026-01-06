@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTeam } from '../context/TeamContext';
-import { Mail, Phone, MapPin, UserPlus, Shield, Clock, BarChart2, MoreVertical, Trash2, Edit2, CheckCircle } from 'lucide-react';
+import { Mail, UserPlus, BarChart2, Trash2, Edit2, Shield } from 'lucide-react';
 
 const Team = () => {
     const { members, addMember, updateMember, removeMember } = useTeam();

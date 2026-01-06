@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTasks } from '../context/TaskContext';
 import { format, addDays, differenceInDays, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
-import { ChevronLeft, ChevronRight, Users, Tag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 
 const TimelineView = () => {
     const { tasks } = useTasks();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTasks } from '../context/TaskContext';
 import TaskCard from '../components/TaskCard';
-import { Search, Filter, ArrowUp } from 'lucide-react';
+import { Filter, ArrowUp } from 'lucide-react';
 
 const MyTasks = () => {
     const { tasks } = useTasks();

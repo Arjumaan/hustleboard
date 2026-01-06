@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForms } from '../context/FormContext';
-import { Layout, Plus, Copy, ExternalLink, Trash2, CheckCircle, BarChart3, Settings2, Eye, Share2 } from 'lucide-react';
+import { Layout, Plus, Trash2, BarChart3, Eye, Share2 } from 'lucide-react';
 
 const Forms = () => {
     const { forms, addForm, deleteForm, updateForm } = useForms();
